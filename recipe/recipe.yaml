@@ -1,0 +1,50 @@
+schema_version: 1
+
+context:
+  name: google-drive
+  version: "0.5.1"
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  url: https://github.com/eduardogr/google-drive-python/archive/v${{ version }}.tar.gz
+  sha256: 01c2fb8aec36185bf6efb617fb9c30861075f85b5b95c655a4e5bf52ffd933d1
+
+build:
+  number: 1
+  noarch: python
+  script: ${{ PYTHON }} -m pip install . -vv
+  python:
+    entry_points:
+      - google-drive = googledrive.cli:googledrive
+
+requirements:
+  host:
+    - pip
+    - python ${{ python_min }}.*
+    - setuptools <81
+  run:
+    - dataclasses ==0.6
+    - google-api-python-client ==1.8.0
+    - google-auth-httplib2 ==0.0.3
+    - google-auth-oauthlib ==0.4.1
+    - python >=${{ python_min }}
+
+tests:
+  - python:
+      imports:
+        - googledrive
+      pip_check: false
+
+      python_version: ${{ python_min }}.*
+about:
+  summary: Library and cli to manage and interact with your Google Drive
+  license: Apache-2.0
+  license_file: LICENSE
+  homepage: https://github.com/eduardogr/google-drive-python
+
+extra:
+  recipe-maintainers:
+    - jan-janssen
